@@ -1,4 +1,8 @@
-module Image exposing (..)
+module Image exposing
+    ( init
+    , Msg, update
+    , view, defaultView
+    )
 
 
 
