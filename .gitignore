@@ -4,6 +4,7 @@ repl-temp-*
 
 # temporary files
 *.swp
+index.html
 
 
 # Created by https://www.gitignore.io/api/linux,osx,windows
