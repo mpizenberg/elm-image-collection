@@ -36,6 +36,11 @@ type alias Model =
     }
 
 
+init : String -> Int -> Int -> (Model, Cmd msg)
+init url width height =
+    (Model url width height, Cmd.none)
+
+
 
 
 -- UPDATE ############################################################
