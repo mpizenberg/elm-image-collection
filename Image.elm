@@ -48,6 +48,15 @@ type Msg
     | Resize Int Int
 
 
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+    case msg of
+        Change url width height ->
+            (Model url width height, Cmd.none)
+        Resize width height ->
+            (Model model.url width height, Cmd.none)
+
+
 
 
 -- VIEW ##############################################################
