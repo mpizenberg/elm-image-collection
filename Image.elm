@@ -73,7 +73,7 @@ update msg model =
 
 
 
-view : Model -> TagType -> Maybe Class -> Maybe (Int, Int) -> VirtualDom.Node Msg
+view : Model -> TagType -> Maybe Class -> Maybe (Int, Int) -> VirtualDom.Node msg
 view model tagType classStyle size =
     let
         (width, height) =
@@ -98,6 +98,6 @@ view model tagType classStyle size =
                     ] []
 
 
-defaultView : Model -> VirtualDom.Node Msg
+defaultView : Model -> VirtualDom.Node msg
 defaultView model =
     view model ImgTag Nothing Nothing
