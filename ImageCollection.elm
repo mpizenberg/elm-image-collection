@@ -38,6 +38,12 @@ type Model =
     ImageCollection Model_
 
 
+init : (Model, Cmd Msg)
+init =
+    ( ImageCollection <| Model_ Dict.empty Nothing
+    , Cmd.none
+    )
+
 
 
 -- UPDATE ############################################################
@@ -57,9 +63,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg (ImageCollection model) =
     case msg of
         Clear ->
-            ( ImageCollection <| Model_ Dict.empty Nothing
-            , Cmd.none
-            )
+            init
         Remove key ->
             ( ImageCollection {model | images = Dict.remove key model.images}
             , Cmd.none
