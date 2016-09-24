@@ -47,9 +47,33 @@ type Model =
 
 type Msg
     = Clear
-    | Add Key Image.Model
     | Remove Key
+    | Add Key Image.Model
     | Update Key Image.Model
+    | SetDefaultSize (Maybe (Int, Int))
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg (ImageCollection model) =
+    case msg of
+        Clear ->
+            ( ImageCollection <| Model_ Dict.empty Nothing
+            , Cmd.none
+            )
+        Remove key ->
+            ( ImageCollection {model | images = Dict.remove key model.images}
+            , Cmd.none
+            )
+        Add key image ->
+            ( ImageCollection {model | images = Dict.insert key image model.images}
+            , Cmd.none
+            )
+        Update key image ->
+            update (Add key image) (ImageCollection model)
+        SetDefaultSize size ->
+            ( ImageCollection {model | defaultSize = size}
+            , Cmd.none
+            )
 
 
 
