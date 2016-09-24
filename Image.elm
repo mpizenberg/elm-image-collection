@@ -1,5 +1,6 @@
 module Image exposing
-    ( init
+    ( Class, TagType
+    , Model, init
     , Msg, update
     , view, defaultView
     )
@@ -32,17 +33,21 @@ type TagType = ImgTag | SvgTag
 
 
 
--- Model for an image.
-type alias Model =
+type alias Model_ =
     { url : String
     , width : Int
     , height : Int
     }
 
 
+-- Model for an image.
+type Model =
+    Image Model_
+
+
 init : String -> Int -> Int -> (Model, Cmd msg)
 init url width height =
-    (Model url width height, Cmd.none)
+    (Image <| Model_ url width height, Cmd.none)
 
 
 
@@ -58,12 +63,12 @@ type Msg
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+update msg (Image model) =
     case msg of
         Change url width height ->
-            (Model url width height, Cmd.none)
+            (Image <| Model_ url width height, Cmd.none)
         Resize width height ->
-            (Model model.url width height, Cmd.none)
+            (Image <| Model_ model.url width height, Cmd.none)
 
 
 
@@ -74,12 +79,10 @@ update msg model =
 
 
 view : Model -> TagType -> Maybe Class -> Maybe (Int, Int) -> VirtualDom.Node msg
-view model tagType classStyle size =
+view (Image model) tagType classStyle size =
     let
         (width, height) =
-            case size of
-                Nothing -> (model.width, model.height)
-                Just size' -> size'
+            Maybe.withDefault (model.width, model.height) size
     in
         case tagType of
             ImgTag ->
