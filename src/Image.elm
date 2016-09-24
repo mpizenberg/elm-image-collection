@@ -9,8 +9,8 @@ module Image exposing
     , view, defaultView
     )
 
-{-| This module helps you deal with images, wheter for <img> tags
-or inside <svg> as an <image> tag.
+{-| This module helps you deal with images, whether for `<img>` tags
+or for `<image>` tag inside a `<svg>`.
 
 @docs Class, TagType
 
@@ -42,7 +42,7 @@ type alias Class = String
 
 
 {-| A type specifying if the image is going to be displayed
-in a classic <img> tag or inside a <svg> tag.
+in a classic `<img>` tag or inside a `<svg>` tag.
 -}
 type TagType = ImgTag | SvgTag
 
@@ -110,7 +110,7 @@ update msg (Image model) =
 
 {-| View an image, depending on its location.
 
-    -- Get the image in an <img> tag with a size of 320x240 and the class "my-image".
+    -- Get the image in an `<img>` tag with a size of 320x240 and the class "my-image".
     viewNode = view ImgTag (Just "my-image") (Just (320, 240)) model
 -}
 view : TagType -> Maybe Class -> Maybe (Int, Int) -> Model -> VirtualDom.Node msg
@@ -137,7 +137,7 @@ view tagType classStyle size (Image model) =
 
 
 {-| Default view for an image.
-It is an <img> tag using default class "image" and the size of the image.
+It is an `<img>` tag using default class "image" and the size of the image.
 -}
 defaultView : Model -> VirtualDom.Node msg
 defaultView =

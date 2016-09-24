@@ -117,7 +117,7 @@ update msg (ImageCollection model) =
 
 
 {-| The view of an image collection.
-One can define a class for the <div> containing the collection,
+One can define a class for the `<div>` containing the collection,
 a special function detailing the view of each image of the collection,
 a class for each image tag,
 and a default size for the images.
@@ -136,7 +136,7 @@ view collectionClass viewer imageClass size (ImageCollection model) =
         )
 
 
-{-| A simple default viewer putting <img> tags one after the other.
+{-| A simple default viewer putting `<img>` tags one after the other.
 -}
 defaultView : Model -> Node msg
 defaultView (ImageCollection model) =
