@@ -118,14 +118,20 @@ view tagType classStyle size (Image model) =
     let
         (width, height) =
             Maybe.withDefault (model.width, model.height) size
+        sizeStyle =
+            HA.style
+                [ ("width", "auto")
+                , ("height", "auto")
+                , ("max-width", toString width ++ "px")
+                , ("max-height", toString height ++ "px")
+                ]
     in
         case tagType of
             ImgTag ->
                 H.img
                     [ HA.class <| Maybe.withDefault "image" classStyle
                     , HA.src model.url
-                    , HA.width width
-                    , HA.height height
+                    , sizeStyle
                     ] []
             SvgTag ->
                 Svg.image
