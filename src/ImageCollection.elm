@@ -122,9 +122,12 @@ a special function detailing the view of each image of the collection,
 a class for each image tag,
 and a default size for the images.
 
+    viewer : Maybe Class -> Maybe (Int, Int) -> Key -> Image.Model -> Node msg
     viewer class size key imageModel =
-        Image.view imageModel Image.ImgTag class size
-    collectionNode = view (Just "my-collection") viewer Nothing (Just (320, 240)) model
+        Image.view Image.ImgTag class size imageModel
+
+    collectionNode =
+        view (Just "my-collection") viewer Nothing (Just (320, 240)) model
 -}
 view : Maybe Class -> ImageViewer msg -> Maybe Class -> Maybe (Int, Int) -> Model -> Node msg
 view collectionClass viewer imageClass size (ImageCollection model) =
