@@ -150,4 +150,4 @@ defaultView (ImageCollection model) =
 
 defaultImageViewer : ImageViewer msg
 defaultImageViewer class size key imageModel =
-    Image.view imageModel Image.ImgTag class size
+    Image.view Image.ImgTag class size imageModel

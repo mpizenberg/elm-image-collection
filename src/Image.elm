@@ -111,10 +111,10 @@ update msg (Image model) =
 {-| View an image, depending on its location.
 
     -- Get the image in an <img> tag with a size of 320x240 and the class "my-image".
-    viewNode = view model ImgTag (Just "my-image") (Just (320, 240))
+    viewNode = view ImgTag (Just "my-image") (Just (320, 240)) model
 -}
-view : Model -> TagType -> Maybe Class -> Maybe (Int, Int) -> VirtualDom.Node msg
-view (Image model) tagType classStyle size =
+view : TagType -> Maybe Class -> Maybe (Int, Int) -> Model -> VirtualDom.Node msg
+view tagType classStyle size (Image model) =
     let
         (width, height) =
             Maybe.withDefault (model.width, model.height) size
@@ -140,5 +140,5 @@ view (Image model) tagType classStyle size =
 It is an <img> tag using default class "image" and the size of the image.
 -}
 defaultView : Model -> VirtualDom.Node msg
-defaultView model =
-    view model ImgTag Nothing Nothing
+defaultView =
+    view ImgTag Nothing Nothing
