@@ -1,5 +1,8 @@
 module ImageCollection exposing
-    (..)
+    ( Model, init
+    , Msg(..), update
+    , view, defaultView
+    )
 
 
 
