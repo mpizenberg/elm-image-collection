@@ -1,5 +1,5 @@
 module Image exposing
-    ( Class, TagType
+    ( Class, TagType(..)
     , Model, init
     , Msg, update
     , view, defaultView
