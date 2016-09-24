@@ -9,7 +9,21 @@ module Image exposing
     , view, defaultView
     )
 
+{-| This module helps you deal with images, wheter for <img> tags
+or inside <svg> as an <image> tag.
 
+@docs Class, TagType
+
+# Model
+@docs Model, init
+
+# Update
+@docs Msg, update
+
+# View
+@docs view, defaultView
+
+-}
 
 
 import VirtualDom
@@ -21,12 +35,15 @@ import Svg.Attributes as SvgA
 
 
 
--- For readability purpose in type definitions.
--- Refers to the class attribute of html tags.
+{-| For readability purpose in type definitions.
+Refers to the class attribute of html tags.
+-}
 type alias Class = String
 
--- A type specifing if the image is going to be displayed
--- in a classic <img> tag or inside a <svg> tag.
+
+{-| A type specifying if the image is going to be displayed
+in a classic <img> tag or inside a <svg> tag.
+-}
 type TagType = ImgTag | SvgTag
 
 
@@ -44,11 +61,16 @@ type alias Model_ =
     }
 
 
--- Model for an image.
+{-| Model for an image.
+-}
 type Model =
     Image Model_
 
 
+{-| Initialize an image with its url, width and height.
+
+    (model, msg) = init "img/cute_cat.png" 320 240
+-}
 init : String -> Int -> Int -> (Model, Cmd msg)
 init url width height =
     (Image <| Model_ url width height, Cmd.none)
@@ -61,11 +83,15 @@ init url width height =
 
 
 
+{-| The type of messages the Image module may use.
+-}
 type Msg
     = Change String Int Int
     | Resize Int Int
 
 
+{-| Update an image.
+-}
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg (Image model) =
     case msg of
@@ -82,6 +108,11 @@ update msg (Image model) =
 
 
 
+{-| View an image, depending on its location.
+
+    -- Get the image in an <img> tag with a size of 320x240 and the class "my-image".
+    viewNode = view model ImgTag (Just "my-image") (Just (320, 240))
+-}
 view : Model -> TagType -> Maybe Class -> Maybe (Int, Int) -> VirtualDom.Node msg
 view (Image model) tagType classStyle size =
     let
@@ -105,6 +136,9 @@ view (Image model) tagType classStyle size =
                     ] []
 
 
+{-| Default view for an image.
+It is an <img> tag using default class "image" and the size of the image.
+-}
 defaultView : Model -> VirtualDom.Node msg
 defaultView model =
     view model ImgTag Nothing Nothing

@@ -8,7 +8,18 @@ module ImageCollection exposing
     , view, defaultView
     )
 
+{-| The ImageCollection module helps dealing with collections of images.
 
+# Model
+@docs Model, init
+
+# Update
+@docs Msg, update
+
+# View
+@docs view, defaultView
+
+-}
 
 
 import VirtualDom exposing (Node)
@@ -41,13 +52,20 @@ type alias Model_ =
     }
 
 
+{-| The model for a collection of images.
+-}
 type Model =
     ImageCollection Model_
 
 
-init : (Model, Cmd Msg)
-init =
-    ( ImageCollection <| Model_ Dict.empty Nothing
+{-| Initialize the model of a collection of images
+with the default size of image views.
+
+    (model, msg) = init (Just (320, 240))
+-}
+init : Maybe (Int, Int) -> (Model, Cmd Msg)
+init defaultSize =
+    ( ImageCollection <| Model_ Dict.empty defaultSize
     , Cmd.none
     )
 
@@ -58,6 +76,8 @@ init =
 
 
 
+{-| The type of messages to interact with image collections.
+-}
 type Msg
     = Clear
     | Remove Key
@@ -66,11 +86,13 @@ type Msg
     | SetDefaultSize (Maybe (Int, Int))
 
 
+{-| Update the image collection.
+-}
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg (ImageCollection model) =
     case msg of
         Clear ->
-            init
+            init Nothing
         Remove key ->
             ( ImageCollection {model | images = Dict.remove key model.images}
             , Cmd.none
@@ -94,6 +116,16 @@ update msg (ImageCollection model) =
 
 
 
+{-| The view of an image collection.
+One can define a class for the <div> containing the collection,
+a special function detailing the view of each image of the collection,
+a class for each image tag,
+and a default size for the images.
+
+    viewer class size key imageModel =
+        Image.view imageModel Image.ImgTag class size
+    collectionNode = view (Just "my-collection") viewer Nothing (Just (320, 240)) model
+-}
 view : Maybe Class -> ImageViewer msg -> Maybe Class -> Maybe (Int, Int) -> Model -> Node msg
 view collectionClass viewer imageClass size (ImageCollection model) =
     H.div
@@ -104,6 +136,8 @@ view collectionClass viewer imageClass size (ImageCollection model) =
         )
 
 
+{-| A simple default viewer putting <img> tags one after the other.
+-}
 defaultView : Model -> Node msg
 defaultView (ImageCollection model) =
     view
