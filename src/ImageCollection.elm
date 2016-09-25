@@ -3,12 +3,15 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 module ImageCollection exposing
-    ( Model, init
+    ( Key, ImageViewer
+    , Model, init
     , Msg(..), update
     , view, defaultView
     )
 
 {-| The ImageCollection module helps dealing with collections of images.
+
+@docs Key, ImageViewer
 
 # Model
 @docs Model, init
@@ -33,8 +36,9 @@ import Image exposing (Class, TagType)
 
 
 
--- For readability purpose in type definitions.
+{-| The key type to access images in the collection -}
 type alias Key = String
+{-| Alias for readability in type definitions -}
 type alias ImageViewer msg =
     Maybe Class -> Maybe (Int, Int) -> Key -> Image.Model -> Node msg
 
