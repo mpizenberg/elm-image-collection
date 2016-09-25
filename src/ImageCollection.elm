@@ -6,7 +6,7 @@ module ImageCollection exposing
     ( Key, ImageViewer
     , Model, init
     , Msg(..), update
-    , view, defaultView
+    , view, defaultView, viewOne
     )
 
 {-| The ImageCollection module helps dealing with collections of images.
@@ -20,7 +20,7 @@ module ImageCollection exposing
 @docs Msg, update
 
 # View
-@docs view, defaultView
+@docs view, defaultView, viewOne
 
 -}
 
@@ -153,6 +153,20 @@ defaultView (ImageCollection model) =
         Nothing
         model.defaultSize
         (ImageCollection model)
+
+
+{-| View only one image of the collection -}
+-- Maybe Class -> Maybe (Int, Int) -> Key -> Image.Model -> Node msg
+viewOne : TagType -> (Maybe Class) -> (Maybe (Int, Int)) -> Key -> Model -> Node msg
+viewOne tag class size key (ImageCollection model) =
+    let
+        imageModel = Dict.get key model.images
+    in
+        case imageModel of
+            Nothing ->
+                H.text "No Corresponding Image"
+            Just image ->
+                Image.view tag class size image
 
 
 defaultImageViewer : ImageViewer msg
