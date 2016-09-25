@@ -3,10 +3,22 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 module ImageGallery exposing
-    ( ..
+    ( Model, init
+    , Msg(..), update
+    , defaultView, imageViewer, defaultViewThumbs, defaultViewSelected
     )
 
 {-| The ImageGallery module helps displaying a gallery of images.
+
+# Model
+@docs Model, init
+
+# Update
+@docs Msg, update
+
+# View
+@docs defaultView, imageViewer, defaultViewThumbs, defaultViewSelected
+
 -}
 
 
@@ -60,6 +72,7 @@ init =
 
 
 
+{-| The type of messages to interact with an image gallery -}
 type Msg
     = Clear
     -- Add key thumb image
@@ -71,6 +84,7 @@ type Msg
     | Thumb ImageCollection.Msg
 
 
+{-| Update the gallery depending on the message -}
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg (ImageGallery model) =
     case msg of
@@ -124,6 +138,7 @@ update msg (ImageGallery model) =
 
 
 
+{-| Default view for an image gallery -}
 defaultView : (Maybe (Int, Int)) -> (Maybe (Int, Int)) -> Model -> H.Html Msg
 defaultView fullSize thumbSize model =
     H.div []
@@ -133,6 +148,7 @@ defaultView fullSize thumbSize model =
         ]
 
 
+{-| Just a viewer for 1 image -}
 imageViewer : ImageViewer Msg
 imageViewer class size key imgModel =
     H.a
@@ -140,6 +156,7 @@ imageViewer class size key imgModel =
         [ Image.view Image.ImgTag class size imgModel ]
 
 
+{-| Default view of the thumbnails of an image gallery -}
 defaultViewThumbs : (Maybe (Int, Int)) -> Model -> H.Html Msg
 defaultViewThumbs size (ImageGallery model) =
     ImageCollection.view
@@ -150,6 +167,7 @@ defaultViewThumbs size (ImageGallery model) =
         model.thumbCollection
 
 
+{-| Default view of the currently selected image of an image gallery -}
 defaultViewSelected : (Maybe (Int, Int)) -> Model -> H.Html Msg
 defaultViewSelected size (ImageGallery model) =
     case model.selected of
