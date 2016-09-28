@@ -6,6 +6,7 @@ module ImageGallery exposing
     ( Model, init
     , Msg(..), update
     , defaultView, imageViewer, defaultViewThumbs, defaultViewSelected
+    , selectedImage
     )
 
 {-| The ImageGallery module helps displaying a gallery of images.
@@ -18,6 +19,9 @@ module ImageGallery exposing
 
 # View
 @docs defaultView, imageViewer, defaultViewThumbs, defaultViewSelected
+
+# Outputs
+@docs selectedImage
 
 -}
 
@@ -192,3 +196,19 @@ defaultViewSelected size (ImageGallery model) =
                 size
                 key
                 model.collection
+
+
+
+
+-- OUTPUTS ###########################################################
+
+
+
+
+{-| Return currently selected image -}
+selectedImage : Model -> Maybe Image.Model
+selectedImage (ImageGallery model) =
+    case model.selected of
+        Nothing -> Nothing
+        Just key ->
+            ImColl.getImage key model.collection

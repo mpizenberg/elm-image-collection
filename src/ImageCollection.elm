@@ -7,6 +7,7 @@ module ImageCollection exposing
     , Model, init
     , Msg(..), update
     , view, defaultView, viewOne
+    , getImage
     )
 
 {-| The ImageCollection module helps dealing with collections of images.
@@ -21,6 +22,9 @@ module ImageCollection exposing
 
 # View
 @docs view, defaultView, viewOne
+
+# Outputs
+@docs getImage
 
 -}
 
@@ -172,3 +176,16 @@ viewOne tag class size key (ImageCollection model) =
 defaultImageViewer : ImageViewer msg
 defaultImageViewer class size key imageModel =
     Image.view Image.ImgTag class size imageModel
+
+
+
+
+-- OUTPUTS ###########################################################
+
+
+
+
+{-| Return the corresponding image -}
+getImage : Key -> Model -> Maybe Image.Model
+getImage key (ImageCollection model) =
+    Dict.get key model.images
