@@ -28,7 +28,7 @@ import Html.Attributes as HA
 import Html.Events as HE
 
 
-import ImageCollection exposing (Key, ImageViewer)
+import ImageCollection as ImColl exposing (Key, ImageViewer)
 import Image exposing (TagType(..))
 import Helpers as HP
 
@@ -41,8 +41,8 @@ import Helpers as HP
 
 
 type alias Model_ =
-    { collection : ImageCollection.Model
-    , thumbCollection : ImageCollection.Model
+    { collection : ImColl.Model
+    , thumbCollection : ImColl.Model
     , selected : Maybe Key
     }
 
@@ -53,16 +53,19 @@ type Model =
 
 
 {-| Initialize an empty model of an image gallery -}
-init : (Model, Cmd Msg)
+init : (Model, Cmd Msg, Maybe Key)
 init =
     let
-        (coll, collMsg) = ImageCollection.init Nothing
-        (thumbs, thumbsMsg) = ImageCollection.init Nothing
+        (coll, collMsg) = ImColl.init Nothing
+        (thumbs, thumbsMsg) = ImColl.init Nothing
     in
-        ( ImageGallery <| Model_ coll thumbs Nothing ) !
-        [ Cmd.map Coll collMsg
-        , Cmd.map Thumb thumbsMsg
-        ]
+        ( ImageGallery <| Model_ coll thumbs Nothing
+        , Cmd.batch
+            [ Cmd.map Coll collMsg
+            , Cmd.map Thumb thumbsMsg
+            ]
+        , Nothing
+        )
 
 
 
@@ -80,12 +83,12 @@ type Msg
     | Update Key (Maybe Image.Model) Image.Model
     | Remove Key
     | Select (Maybe Key)
-    | Coll ImageCollection.Msg
-    | Thumb ImageCollection.Msg
+    | Coll ImColl.Msg
+    | Thumb ImColl.Msg
 
 
 {-| Update the gallery depending on the message -}
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> (Model, Cmd Msg, Maybe Key)
 update msg (ImageGallery model) =
     case msg of
         Clear ->
@@ -94,40 +97,49 @@ update msg (ImageGallery model) =
             let
                 thumb = Maybe.withDefault image maybeThumb
             in
-                ImageGallery model !
-                [ Cmd.map Coll <| HP.msgToCmd <| ImageCollection.Add key image
-                , Cmd.map Thumb <| HP.msgToCmd <| ImageCollection.Add key thumb
-                ]
+                ( ImageGallery model
+                , Cmd.batch
+                    [ Cmd.map Coll <| HP.msgToCmd <| ImColl.Add key image
+                    , Cmd.map Thumb <| HP.msgToCmd <| ImColl.Add key thumb
+                    ]
+                , model.selected
+                )
         Update key maybeThumb image ->
             update (Add key maybeThumb image) (ImageGallery model)
         Remove key ->
-            ImageGallery model !
-            [ Cmd.map Coll <| HP.msgToCmd <| ImageCollection.Remove key
-            , Cmd.map Thumb <| HP.msgToCmd <| ImageCollection.Remove key
-            ]
+            ( ImageGallery model
+            , Cmd.batch
+                [ Cmd.map Coll <| HP.msgToCmd <| ImColl.Remove key
+                , Cmd.map Thumb <| HP.msgToCmd <| ImColl.Remove key
+                ]
+            , model.selected
+            )
         Select maybeKey ->
             ( ImageGallery {model | selected = maybeKey}
             , Cmd.none
+            , maybeKey
             )
         Coll collMsg ->
             let
-                (coll, collMsg') =
-                    ImageCollection.update
+                (coll, collCmd) =
+                    ImColl.update
                         collMsg
                         model.collection
             in
                 ( ImageGallery {model | collection = coll}
-                , Cmd.map Coll collMsg'
+                , Cmd.map Coll collCmd
+                , model.selected
                 )
         Thumb thumbsMsg ->
             let
-                (thumbs, thumbsMsg') =
-                    ImageCollection.update
+                (thumbs, thumbsCmd) =
+                    ImColl.update
                         thumbsMsg
                         model.thumbCollection
             in
                 ( ImageGallery {model | thumbCollection = thumbs}
-                , Cmd.map Thumb thumbsMsg'
+                , Cmd.map Thumb thumbsCmd
+                , model.selected
                 )
 
 
@@ -159,7 +171,7 @@ imageViewer class size key imgModel =
 {-| Default view of the thumbnails of an image gallery -}
 defaultViewThumbs : (Maybe (Int, Int)) -> Model -> H.Html Msg
 defaultViewThumbs size (ImageGallery model) =
-    ImageCollection.view
+    ImColl.view
         (Just "thumb-coll")
         imageViewer
         (Just "thumb")
@@ -174,7 +186,7 @@ defaultViewSelected size (ImageGallery model) =
         Nothing ->
             H.text "No image Selected"
         Just key ->
-            ImageCollection.viewOne
+            ImColl.viewOne
                 ImgTag
                 (Just "img-selected")
                 size

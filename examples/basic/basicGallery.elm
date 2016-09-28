@@ -35,9 +35,9 @@ type alias Model =
 init : (Model, Cmd Msg)
 init =
     let
-        (gallery, galleryMsg) = ImageGallery.init
+        (gallery, galleryCmd, _) = ImageGallery.init
     in
-        ( Model gallery "", Cmd.map Gall galleryMsg )
+        ( Model gallery "", Cmd.map Gall galleryCmd )
 
 
 
@@ -68,10 +68,10 @@ update msg model =
                 (model, Cmd.map Gall <| HP.msgToCmd <| ImageGallery.Add url Nothing im)
         Gall galleryMsg ->
             let
-                (gallery, galleryMsg') =
+                (gallery, galleryCmd, _) =
                     ImageGallery.update galleryMsg model.gallery
             in
-                ({model | gallery = gallery}, Cmd.map Gall galleryMsg')
+                ({model | gallery = gallery}, Cmd.map Gall galleryCmd)
 
 
 
