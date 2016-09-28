@@ -7,6 +7,7 @@ module Image exposing
     , Model, init
     , Msg, update
     , view, defaultView
+    , size
     )
 
 {-| This module helps you deal with images, whether for `<img>` tags
@@ -22,6 +23,9 @@ or for `<image>` tag inside a `<svg>`.
 
 # View
 @docs view, defaultView
+
+# Outputs
+@docs size
 
 -}
 
@@ -148,3 +152,16 @@ It is an `<img>` tag using default class "image" and the size of the image.
 defaultView : Model -> VirtualDom.Node msg
 defaultView =
     view ImgTag Nothing Nothing
+
+
+
+
+-- OUTPUTS ###########################################################
+
+
+
+
+{-| Return the size of an Image -}
+size : Model -> (Int, Int)
+size (Image model) =
+    (model.width, model.height)

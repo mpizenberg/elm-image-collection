@@ -1,5 +1,5 @@
 {
-    "version": "2.1.0",
+    "version": "2.2.0",
     "summary": "Managing a collection of images",
     "repository": "https://github.com/mpizenberg/elm-image-collection.git",
     "license": "MPLv2",
