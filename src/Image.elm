@@ -143,6 +143,7 @@ view tagType classStyle size (Image model) =
                     , SvgA.xlinkHref model.url
                     , SvgA.width <| toString width
                     , SvgA.height <| toString height
+                    , SvgA.pointerEvents "none"
                     ] []
 
 
