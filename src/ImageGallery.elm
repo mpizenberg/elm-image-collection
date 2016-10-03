@@ -105,6 +105,7 @@ update msg (ImageGallery model) =
                 , Cmd.batch
                     [ Cmd.map Coll <| HP.msgToCmd <| ImColl.Add key image
                     , Cmd.map Thumb <| HP.msgToCmd <| ImColl.Add key thumb
+                    , HP.msgToCmd <| Select <| Just key
                     ]
                 , model.selected
                 )
