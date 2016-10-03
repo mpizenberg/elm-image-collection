@@ -5,7 +5,7 @@
 module ImageGallery exposing
     ( Model, init
     , Msg(..), update
-    , defaultView, imageViewer, defaultViewThumbs, defaultViewSelected
+    , defaultView, imageViewer, viewThumbs, defaultViewThumbs, defaultViewSelected
     , selectedImage
     )
 
@@ -18,7 +18,7 @@ module ImageGallery exposing
 @docs Msg, update
 
 # View
-@docs defaultView, imageViewer, defaultViewThumbs, defaultViewSelected
+@docs defaultView, imageViewer, viewThumbs, defaultViewThumbs, defaultViewSelected
 
 # Outputs
 @docs selectedImage
@@ -171,6 +171,17 @@ imageViewer class size key imgModel =
     H.a
         [ HA.href "javascript:;", HE.onClick <| Select <| Just key]
         [ Image.view Image.ImgTag class size imgModel ]
+
+
+{-| View the thumbnails of an image gallery with a specific image viewer -}
+viewThumbs : (Maybe (Int, Int)) -> ImColl.ImageViewer Msg -> Model -> H.Html Msg
+viewThumbs size viewer (ImageGallery model) =
+    ImColl.view
+        (Just "thumb-coll")
+        viewer
+        (Just "thumb")
+        size
+        model.thumbCollection
 
 
 {-| Default view of the thumbnails of an image gallery -}
