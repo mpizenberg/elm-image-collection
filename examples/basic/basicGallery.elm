@@ -65,7 +65,7 @@ update msg model =
             let
                 (im, imMsg) = Image.init url 0 0
             in
-                (model, Cmd.map Gall <| HP.msgToCmd <| ImageGallery.Add url Nothing im)
+                update (Gall <| ImageGallery.Add url Nothing im) model
         Gall galleryMsg ->
             let
                 (gallery, galleryCmd, _) =

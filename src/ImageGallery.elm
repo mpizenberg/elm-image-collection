@@ -101,24 +101,18 @@ update msg (ImageGallery model) =
             let
                 thumb = Maybe.withDefault image maybeThumb
             in
-                ( ImageGallery model
-                , Cmd.batch
-                    [ Cmd.map Coll <| HP.msgToCmd <| ImColl.Add key image
-                    , Cmd.map Thumb <| HP.msgToCmd <| ImColl.Add key thumb
-                    , HP.msgToCmd <| Select <| Just key
+                HP.updateFull update (ImageGallery model, model.selected)
+                    [ Coll <| ImColl.Add key image
+                    , Thumb <| ImColl.Add key thumb
+                    , Select <| Just key
                     ]
-                , model.selected
-                )
         Update key maybeThumb image ->
             update (Add key maybeThumb image) (ImageGallery model)
         Remove key ->
-            ( ImageGallery model
-            , Cmd.batch
-                [ Cmd.map Coll <| HP.msgToCmd <| ImColl.Remove key
-                , Cmd.map Thumb <| HP.msgToCmd <| ImColl.Remove key
+            HP.updateFull update (ImageGallery model, model.selected)
+                [ Coll <| ImColl.Remove key
+                , Thumb <| ImColl.Remove key
                 ]
-            , model.selected
-            )
         Select maybeKey ->
             ( ImageGallery {model | selected = maybeKey}
             , Cmd.none
