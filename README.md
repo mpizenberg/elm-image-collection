@@ -13,23 +13,23 @@ This package aims at easing the manipulation and display of a collection of imag
 elm-package install mpizenberg/elm-image-collection
 ```
 
-## Basic Usage
+## Usage
 
-To initialize an image collection, you may provide a default viewing size (320x240 here)
-
-```elm
-(imColl, imCollMsg) = ImageCollection.init <| Just (320, 240)
-```
-
-In the view, you may use the very basic default viewer
-(see `defaultView` example below) or the more advance viewer (`view`).
+An `ImageCollection` is basically an elm `Dict String Image`.
+So anything you can do with a `Dict` can be done with an `ImageCollection`.
+For example, to add an image to the collection, simply use `Dict.insert`:
 
 ```elm
-App.map ImColl <| ImageCollection.defaultView model.collection
+collection : ImageCollection
+collection = Dict.empty
+
+newCollection = Dict.insert "1" (Image "1.jpg" 320 240) collection
 ```
 
-To see a running basic example, you can just try the one in
-`examples/basic`.
+In order to view your collection of images, use the simple `defaultView`
+function or the more customizable `view`.
+
+A running example is available as the file `example/collection.elm`.
 
 ## Documentation
 
