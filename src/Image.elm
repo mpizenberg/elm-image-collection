@@ -35,6 +35,9 @@ type alias Image =
 
 
 {-| View of an Image in an <img> tag.
+
+You can pass to it a list of html attributes that will be added in the <img> tag.
+You can also set its viewing size (it will keep the image aspect ratio).
 -}
 viewImg : List (H.Attribute msg) -> Maybe ( Int, Int ) -> Image -> Html msg
 viewImg attributes maybeSize image =
@@ -47,7 +50,8 @@ viewImg attributes maybeSize image =
         []
 
 
-{-| View of an Image inside a <svg> tag.
+{-| View of an Image inside a <svg> tag using the
+[<image>](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/image) tag.
 -}
 viewSvg : List (Svg.Attribute msg) -> Maybe ( Int, Int ) -> Image -> Svg msg
 viewSvg attributes maybeSize image =
