@@ -1,7 +1,6 @@
 module Main exposing (..)
 
 import Html as H exposing (Html)
-import Html.App as App
 import Html.Attributes as HA
 import Html.Events as HE
 import Dict exposing (Dict)
@@ -10,7 +9,7 @@ import Image exposing (Image)
 
 
 main =
-    App.beginnerProgram
+    H.beginnerProgram
         { model = init
         , view = view
         , update = update
@@ -75,13 +74,13 @@ urlForm : Html Msg
 urlForm =
     H.div []
         [ H.input
-            [ HA.type' "text"
+            [ HA.type_ "text"
             , HA.placeholder "Image url"
             , HE.onInput ChangeUrl
             ]
             []
         , H.input
-            [ HA.type' "submit"
+            [ HA.type_ "submit"
             , HA.value "Add Image"
             , HE.onClick AddImage
             ]
