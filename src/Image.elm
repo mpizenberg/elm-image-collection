@@ -41,13 +41,13 @@ You can also set its viewing size (it will keep the image aspect ratio).
 -}
 viewImg : List (H.Attribute msg) -> Maybe ( Int, Int ) -> Image -> Html msg
 viewImg attributes maybeSize image =
-    H.img
-        (attributes
-            ++ [ HA.src image.url
-               , maxSizeAttribute <| viewSize image maybeSize
-               ]
-        )
-        []
+    let
+        htmlAttributes =
+            (maxSizeAttribute <| viewSize image maybeSize)
+                :: (HA.src image.url)
+                :: attributes
+    in
+        H.img htmlAttributes []
 
 
 {-| View of an Image inside a <svg> tag using the
@@ -58,16 +58,16 @@ viewSvg attributes maybeSize image =
     let
         ( width, height ) =
             viewSize image maybeSize
-    in
-        Svg.image
-            (attributes
+
+        svgAttributes =
+            attributes
                 ++ [ SvgA.xlinkHref image.url
                    , SvgA.pointerEvents "none"
                    , SvgA.width <| toString width
                    , SvgA.height <| toString height
                    ]
-            )
-            []
+    in
+        Svg.image svgAttributes []
 
 
 

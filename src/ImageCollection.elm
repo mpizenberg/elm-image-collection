@@ -86,13 +86,10 @@ view :
     -> ImageCollection
     -> Html msg
 view itemViewer imgAttributes maybeSize collAttributes collection =
-    H.div
-        collAttributes
-        (Dict.values <|
-            Dict.map
-                (itemViewer imgAttributes maybeSize)
-                collection
-        )
+    collection
+        |> Dict.map (itemViewer imgAttributes maybeSize)
+        |> Dict.values
+        |> H.div collAttributes
 
 
 {-| The default view, just all the images in a div.
