@@ -4,7 +4,7 @@ import Html as H exposing (Html)
 import Html.Attributes as HA
 import Html.Events as HE
 import Dict exposing (Dict)
-import ImageCollection as ImColl exposing (Key, ImageCollection)
+import Image.Collection as Collection exposing (Key, Collection)
 import Image exposing (Image)
 
 
@@ -21,7 +21,7 @@ main =
 
 
 type alias Model =
-    { collection : ImageCollection
+    { collection : Collection
     , imageUrl : String
     }
 
@@ -66,7 +66,7 @@ view model =
     H.div []
         [ urlForm
           -- , H.br [] []
-        , ImColl.defaultView model.collection
+        , Collection.view [] Collection.defaultItemViewer model.collection
         ]
 
 

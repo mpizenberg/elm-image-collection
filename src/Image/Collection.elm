@@ -3,16 +3,25 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 
-module ImageCollection exposing (..)
+module Image.Collection
+    exposing
+        ( Key
+        , Collection
+        , resize
+        , ItemViewer
+        , defaultItemViewer
+        , view
+        )
 
-{-| The ImageCollection module helps dealing with collections of images.
+{-| This module helps you deal with collections of images.
 
-@docs Key, ImageCollection
-@docs ItemViewer, defaultItemViewer
-@docs view, defaultView
+@docs Key, Collection
+@docs resize
+@docs ItemViewer, defaultItemViewer, view
 -}
 
 import Html as H exposing (Html)
+import Html.Attributes as HA
 import Dict exposing (Dict)
 import Image exposing (Image)
 
@@ -28,25 +37,37 @@ type alias Key =
 
 {-| A collection of images.
 -}
-type alias ImageCollection =
+type alias Collection =
     Dict Key Image
+
+
+
+-- UPDATE ############################################################
+
+
+{-| Resize all images of a collection.
+-}
+resize : ( Int, Int ) -> Collection -> Collection
+resize size collection =
+    collection
+        |> Dict.map (\key image -> Image.resize size image)
 
 
 
 -- VIEW ##############################################################
 
 
-{-| A type alias describing a view function for an item (key,images) of the collection.
+{-| A type alias describing a view function for an item (key,image) of the collection.
 -}
 type alias ItemViewer msg =
-    List (H.Attribute msg) -> Maybe ( Int, Int ) -> Key -> Image -> Html msg
+    Key -> Image -> Html msg
 
 
 {-| The default itemViewer, just a simple Image viewer, not taking care of the key.
 -}
 defaultItemViewer : ItemViewer msg
-defaultItemViewer attributes maybeSize key image =
-    Image.viewImg attributes maybeSize image
+defaultItemViewer key =
+    Image.viewImg []
 
 
 {-| View a collection of images with a specific item viewer.
@@ -59,13 +80,12 @@ For example, with the following code:
             , ("2", Image "2.jpg" 640 480)
             ]
 
+    itemViewer key =
+        Image.viewImg [ HA.class "image" ]
+
     html =
-        view
-            defaultItemViewer
-            [ HA.class "image" ]
-            Nothing
-            [ HA.class "collection" ]
-            collection
+        collection
+            |> view [ HA.class "collection" ] itemViewer
 
 The html will look like:
 
@@ -78,22 +98,9 @@ The html will look like:
             style="width: auto; height: auto; max-width: 640px; max-height: 480px;">
     </div>
 -}
-view :
-    ItemViewer msg
-    -> List (H.Attribute msg)
-    -> Maybe ( Int, Int )
-    -> List (H.Attribute msg)
-    -> ImageCollection
-    -> Html msg
-view itemViewer imgAttributes maybeSize collAttributes collection =
+view : List (H.Attribute msg) -> ItemViewer msg -> Collection -> Html msg
+view attributes itemViewer collection =
     collection
-        |> Dict.map (itemViewer imgAttributes maybeSize)
+        |> Dict.map itemViewer
         |> Dict.values
-        |> H.div collAttributes
-
-
-{-| The default view, just all the images in a div.
--}
-defaultView : ImageCollection -> Html msg
-defaultView =
-    view defaultItemViewer [] Nothing []
+        |> H.div attributes

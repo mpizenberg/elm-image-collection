@@ -3,13 +3,19 @@
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 
-module Image exposing (..)
+module Image
+    exposing
+        ( Image
+        , resize
+        , viewImg
+        , viewSvg
+        )
 
 {-| This module helps you deal with images.
 
 @docs Image
+@docs resize
 @docs viewImg, viewSvg
-@docs viewSize, maxSizeAttribute
 -}
 
 import Html as H exposing (Html)
@@ -31,19 +37,30 @@ type alias Image =
 
 
 
+-- UPDATE ############################################################
+
+
+{-| Change the width and height parameters.
+-}
+resize : ( Int, Int ) -> Image -> Image
+resize ( width, height ) image =
+    { image | width = width, height = height }
+
+
+
 -- VIEW ##############################################################
 
 
 {-| View of an Image in an <img> tag.
 
 You can pass to it a list of html attributes that will be added in the <img> tag.
-You can also set its viewing size (it will keep the image aspect ratio).
+It will keep the image aspect ratio.
 -}
-viewImg : List (H.Attribute msg) -> Maybe ( Int, Int ) -> Image -> Html msg
-viewImg attributes maybeSize image =
+viewImg : List (H.Attribute msg) -> Image -> Html msg
+viewImg attributes image =
     let
         htmlAttributes =
-            (maxSizeAttribute <| viewSize image maybeSize)
+            (maxSizeAttribute ( image.width, image.height ))
                 :: (HA.src image.url)
                 :: attributes
     in
@@ -53,18 +70,15 @@ viewImg attributes maybeSize image =
 {-| View of an Image inside a <svg> tag using the
 [<image>](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/image) tag.
 -}
-viewSvg : List (Svg.Attribute msg) -> Maybe ( Int, Int ) -> Image -> Svg msg
-viewSvg attributes maybeSize image =
+viewSvg : List (Svg.Attribute msg) -> Image -> Svg msg
+viewSvg attributes image =
     let
-        ( width, height ) =
-            viewSize image maybeSize
-
         svgAttributes =
             attributes
                 ++ [ SvgA.xlinkHref image.url
                    , SvgA.pointerEvents "none"
-                   , SvgA.width <| toString width
-                   , SvgA.height <| toString height
+                   , SvgA.width <| toString image.width
+                   , SvgA.height <| toString image.height
                    ]
     in
         Svg.image svgAttributes []
@@ -72,13 +86,6 @@ viewSvg attributes maybeSize image =
 
 
 -- VIEW HELPERS ######################################################
-
-
-{-| Size of an image view with a possible default value.
--}
-viewSize : Image -> Maybe ( Int, Int ) -> ( Int, Int )
-viewSize image =
-    Maybe.withDefault ( image.width, image.height )
 
 
 {-| Html.Attribute msg setting the max size while keeping aspect ratio.
