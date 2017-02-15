@@ -15,21 +15,18 @@ elm-package install mpizenberg/elm-image-collection
 
 ## Usage
 
-An `ImageCollection` is basically an elm `Dict String Image`.
-So anything you can do with a `Dict` can be done with an `ImageCollection`.
+A `Collection` is basically an elm `Dict String Image`.
+So anything you can do with a `Dict` can be done with a `Collection`.
 For example, to add an image to the collection, simply use `Dict.insert`:
 
 ```elm
-collection : ImageCollection
+collection : Collection
 collection = Dict.empty
 
 newCollection = Dict.insert "1" (Image "1.jpg" 320 240) collection
 ```
 
-In order to view your collection of images, use the simple `defaultView`
-function or the more customizable `view`.
-
-A running example is available as the file `example/collection.elm`.
+A running example is available in the file `example/collection.elm`.
 
 ## Documentation
 
