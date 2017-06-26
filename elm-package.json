@@ -2,7 +2,7 @@
     "version": "4.0.1",
     "summary": "Managing and displaying collections of images",
     "repository": "https://github.com/mpizenberg/elm-image-collection.git",
-    "license": "MPLv2",
+    "license": "MPL-2.0",
     "source-directories": [
         "src"
     ],
