@@ -16,6 +16,7 @@ module Image
 @docs Image
 @docs resize
 @docs viewImg, viewSvg
+
 -}
 
 import Html as H exposing (Html)
@@ -51,10 +52,11 @@ resize ( width, height ) image =
 -- VIEW ##############################################################
 
 
-{-| View of an Image in an <img> tag.
+{-| View of an Image in an `<img>` tag.
 
 You can pass to it a list of html attributes that will be added in the <img> tag.
 It will keep the image aspect ratio.
+
 -}
 viewImg : List (H.Attribute msg) -> Image -> Html msg
 viewImg attributes image =
@@ -67,8 +69,8 @@ viewImg attributes image =
         H.img htmlAttributes []
 
 
-{-| View of an Image inside a <svg> tag using the
-[<image>](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/image) tag.
+{-| View of an Image inside a `<svg>` tag using the
+[`<image>`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/image) tag.
 -}
 viewSvg : List (Svg.Attribute msg) -> Image -> Svg msg
 viewSvg attributes image =
